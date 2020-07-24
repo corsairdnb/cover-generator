@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styles from './Counter.css';
 import routes from '../../constants/routes.json';
 import { increment, decrement, incrementIfOdd, incrementAsync, selectCount } from './counterSlice';
 import { RootState } from '../../store';
@@ -11,17 +10,14 @@ export default function Counter() {
   const value = useSelector<RootState, number>(selectCount);
   return (
     <div>
-      <div className={styles.backButton} data-tid="backButton">
+      <div data-tid="backButton">
         <Link to={routes.HOME}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
-      <div className={`counter ${styles.counter}`} data-tid="counter">
-        {value}
-      </div>
-      <div className={styles.btnGroup}>
+      <div data-tid="counter">{value}</div>
+      <div>
         <button
-          className={styles.btn}
           onClick={() => {
             dispatch(increment());
           }}
@@ -31,7 +27,6 @@ export default function Counter() {
           <i className="fa fa-plus" />
         </button>
         <button
-          className={styles.btn}
           onClick={() => {
             dispatch(decrement());
           }}
@@ -41,7 +36,6 @@ export default function Counter() {
           <i className="fa fa-minus" />
         </button>
         <button
-          className={styles.btn}
           onClick={() => {
             dispatch(incrementIfOdd());
           }}
@@ -51,7 +45,6 @@ export default function Counter() {
           odd
         </button>
         <button
-          className={styles.btn}
           onClick={() => {
             dispatch(incrementAsync());
           }}
