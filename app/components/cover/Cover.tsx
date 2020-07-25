@@ -4,14 +4,12 @@ import { useCoverEditor } from './useCoverEditor';
 import { handleInputChange } from './handleInputChange';
 
 export const Cover: FC = () => {
-  const [imageDataUrl, setImageDataUrl] = useState((url = '') => {
-    return url;
-  });
-  const [image, setImage] = useState<HTMLImageElement | undefined>((img?: HTMLImageElement) => img);
+  const [imageDataUrl, setImageDataUrl] = useState('');
+  const [image, setImage] = useState<HTMLImageElement | undefined>();
   const [file, setFile] = useState<File | undefined>((f?: File) => f);
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor();
 
-  const onChange = useCallback(
+  const onImageChange = useCallback(
     (event: SyntheticEvent<HTMLInputElement>) =>
       handleInputChange(event, editorRef.current, {
         onUpdateImageUrl: setImageDataUrl,
@@ -21,10 +19,15 @@ export const Cover: FC = () => {
     [editorRef.current]
   );
 
+  const onFontFamilyInput = useCallback((event: SyntheticEvent<HTMLInputElement>) => {
+    if (!editorRef.current) return;
+    editorRef.current.font = event.currentTarget.value;
+  }, []);
+
   return (
     <div className={styles.cover}>
       <p>
-        Choose File: <input type="file" id="file" ref={fileInputRef} onChange={onChange} />
+        Choose File: <input type="file" id="file" ref={fileInputRef} onChange={onImageChange} />
       </p>
       {image && (
         <p>
@@ -38,6 +41,9 @@ export const Cover: FC = () => {
           </a>
         </p>
       )}
+      <p>
+        Font family: <input type="text" placeholder="Arial" onInput={onFontFamilyInput} />
+      </p>
       <canvas id="canvas" ref={canvasRef} width={700} height={700} />
     </div>
   );

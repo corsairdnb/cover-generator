@@ -28,7 +28,6 @@ export const handleInputChange = (
       currentImage.src = <string>event.target?.result?.toString();
       currentImage.onload = () => {
         editor.image = currentImage;
-        editor.init();
         onUpdateImageUrl(editor.getDataUrl() || '');
         onUpdateImage(currentImage);
         onUpdateFile(currentFile);
