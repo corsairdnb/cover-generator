@@ -9,12 +9,13 @@ export class Editor {
   }
 
   constructor(private context: CanvasRenderingContext2D) {
+    // eslint-disable-next-line no-console
     console.log(this.context);
+    //    this.context.fillStyle = 'green';
+    //    this.context.fillRect(10, 10, 100, 100);
   }
 
   public init() {
-    this.context.fillStyle = 'green';
-    this.context.fillRect(10, 10, 100, 100);
     this.image && this.context.drawImage(this.image, 0, 0, 700, 700);
   }
 
