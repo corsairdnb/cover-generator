@@ -8,7 +8,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-10.14, windows-2019, ubuntu-18.04]
+        os: [ubuntu-20.04]
+        # os: [macos-10.14, windows-2019, ubuntu-18.04]
 
     steps:
       - name: Check out Git repository
@@ -26,6 +27,7 @@ jobs:
       - name: yarn test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
         run: |
           yarn package-ci
           yarn lint
