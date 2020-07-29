@@ -7,7 +7,11 @@ export type Refs = {
   editorRef: RefObject<Editor>;
 };
 
-export const useCoverEditor = (): Refs => {
+type Params = {
+  coverContainerRef: RefObject<HTMLElement | null>;
+};
+
+export const useCoverEditor = ({ coverContainerRef }: Params): Refs => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const editorRef = useRef<Editor | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -16,7 +20,12 @@ export const useCoverEditor = (): Refs => {
     const canvas = canvasRef.current;
     let context: CanvasRenderingContext2D | undefined | null = null;
     if (canvas) {
+      const container = coverContainerRef.current?.getBoundingClientRect();
+      const width = container?.width.toString();
+      const height = container?.height.toString();
       context = canvas.getContext('2d');
+      width && canvas.setAttribute('width', width);
+      height && canvas.setAttribute('height', height);
     }
     if (!editorRef.current && context) {
       editorRef.current = new Editor(context);

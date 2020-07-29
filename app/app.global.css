@@ -15,6 +15,10 @@ body {
   position: relative;
 }
 
+#root {
+  height: 100%;
+}
+
 h2 {
   color: #fff;
   font-size: 2.25rem;
