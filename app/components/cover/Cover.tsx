@@ -1,7 +1,9 @@
 import React, { FC, SyntheticEvent, useCallback, useRef, useState } from 'react';
-import styles from './Cover.module.css';
+import { debounce } from 'throttle-debounce';
 import { useCoverEditor } from './useCoverEditor';
 import { handleInputChange } from './handleInputChange';
+import { debounceTime } from './constants';
+import styles from './Cover.module.css';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -20,12 +22,25 @@ export const Cover: FC = () => {
     [editorRef.current]
   );
 
-  const onFontFamilyInput = useCallback((event: SyntheticEvent<HTMLInputElement>) => {
+  const setNewDataUrl = useCallback(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    editor.font = event.currentTarget.value;
     setImageDataUrl(editor.getDataUrl());
-  }, []);
+  }, [editorRef.current]);
+
+  const fontInputCallback = useCallback(
+    (value: string) => {
+      const editor = editorRef.current;
+      if (!editor) return;
+      editor.font = value;
+      setNewDataUrl();
+    },
+    [editorRef.current]
+  );
+
+  const onFontFamilyInput = debounce(debounceTime, (value: string) => {
+    fontInputCallback(value);
+  });
 
   return (
     <div className={styles.wrapper}>
@@ -46,7 +61,12 @@ export const Cover: FC = () => {
           </p>
         )}
         <p>
-          Font family: <input type="text" placeholder="Arial" onInput={onFontFamilyInput} />
+          Font family:{' '}
+          <input
+            type="text"
+            placeholder="Arial"
+            onInput={({ currentTarget: { value } }) => onFontFamilyInput(value)}
+          />
         </p>
       </div>
       <div className={styles.right} ref={coverContainerRef}>

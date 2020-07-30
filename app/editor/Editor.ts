@@ -39,12 +39,12 @@ export class Editor {
     this.image && this.ctx.drawImage(this.image, 0, 0, 700, 700);
   }
 
-  private render() {
+  public render() {
     this.renderBackground();
     this.renderFonts();
   }
 
   public getDataUrl() {
-    return this.ctx.canvas.toDataURL('image/jpeg');
+    return this.ctx.canvas.toDataURL('image/jpeg', 1);
   }
 }
