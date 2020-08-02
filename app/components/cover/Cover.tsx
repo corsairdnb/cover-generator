@@ -1,9 +1,10 @@
-import React, { FC, SyntheticEvent, useCallback, useRef, useState } from 'react';
+import React, { FC, SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { debounce } from 'throttle-debounce';
 import { useCoverEditor } from './useCoverEditor';
 import { handleInputChange } from './handleInputChange';
 import { debounceTime } from './constants';
 import styles from './Cover.module.css';
+import { usePreset } from './usePreset';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -11,6 +12,14 @@ export const Cover: FC = () => {
   const [file, setFile] = useState<File | undefined>();
   const coverContainerRef = useRef<HTMLDivElement | null>(null);
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor({ coverContainerRef });
+
+  const { assets } = usePreset(editorRef, canvasRef, imageDataUrl);
+
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    assets && assets.length && editor.addAssets(assets);
+  }, [imageDataUrl]);
 
   const onImageChange = useCallback(
     (event: SyntheticEvent<HTMLInputElement>) =>
