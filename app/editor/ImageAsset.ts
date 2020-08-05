@@ -1,4 +1,5 @@
 import { Asset } from './Asset';
+import { AssetProps } from './types';
 
 export enum AssetOrientation {
   HORIZONTAL = 'horizontal',
@@ -18,10 +19,14 @@ export class ImageAsset extends Asset {
   public assetOrientation: AssetOrientation = AssetOrientation.HORIZONTAL;
   public aspectRatio: number;
 
-  constructor(ctx: CanvasRenderingContext2D, readonly image: HTMLImageElement) {
-    super(ctx);
+  constructor(
+    readonly ctx: CanvasRenderingContext2D,
+    readonly props: AssetProps,
+    readonly image: HTMLImageElement
+  ) {
+    super(ctx, props);
     this.image = image;
-    this.aspectRatio = image.width / image.height;
+    this.aspectRatio = Number((image.width / image.height).toFixed(2));
     this.assetOrientation =
       this.aspectRatio > 0 ? AssetOrientation.HORIZONTAL : AssetOrientation.VERTICAL;
   }

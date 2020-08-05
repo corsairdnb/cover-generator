@@ -1,20 +1,20 @@
 import { RefObject, useEffect, useRef } from 'react';
 import { ImageAsset } from '../../editor/ImageAsset';
 import logo from '../../assets/logo.png';
-import { Asset } from '../../editor/Asset';
 import { Editor } from '../../editor/Editor';
+import { props } from './preset';
+import { Preset } from './types';
 
-type Preset = {
-  assets?: Asset[];
-};
-
-export const usePreset = (
+export const usePreset = async (
   editorRef: RefObject<Editor>,
-  canvasRef: RefObject<HTMLCanvasElement>,
-  url: string
-): Preset | undefined => {
+  canvasRef: RefObject<HTMLCanvasElement>
+): Promise<Preset> => {
   const logoRef = useRef<string | null>(null);
-  const assetsRef = useRef<Asset[]>([]);
+
+  let resolveImage: (preset: Preset) => void;
+  const load: Promise<Preset> = new Promise((resolve) => {
+    resolveImage = resolve;
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,15 +30,16 @@ export const usePreset = (
     image.src = logoRef.current;
 
     // TODO: useMemo
+    image.onload = () => {
+      const { maxWidth, bottom } = props;
+      const logoAsset = new ImageAsset(ctx, props, image);
+      const height = Math.round((maxWidth * image.height) / image.width);
+      const y = canvas.getBoundingClientRect().height - height - bottom;
+      logoAsset.attributes = new DOMRect(100, y, maxWidth, height);
+      // TODO: may be some array of assets
+      resolveImage({ assets: [logoAsset] });
+    };
+  }, []);
 
-    const logoAsset = new ImageAsset(ctx, image);
-    const y = canvas.getBoundingClientRect().height - image.height;
-    const maxWidth = 100;
-    const height = Math.round((maxWidth * image.height) / image.width);
-    logoAsset.attributes = new DOMRect(100, y, maxWidth, height);
-
-    assetsRef.current = [logoAsset];
-  }, [url]);
-
-  return { assets: assetsRef.current };
+  return await load;
 };

@@ -32,12 +32,13 @@ export const useCoverEditor = ({ coverContainerRef }: Params): Refs => {
   useEffect(() => {
     const resizeListener = () => {
       const canvas = canvasRef.current;
-      if (canvas) {
-        const container = coverContainerRef.current?.getBoundingClientRect();
-        const width = container?.width.toString();
-        const height = container?.height.toString();
+      const container = coverContainerRef.current;
+      if (canvas && container) {
+        const containerRect = container.getBoundingClientRect();
+        const width = Math.min(containerRect.width || 0, 700).toString();
+        // const height = container?.height.toString();
         width && canvas.setAttribute('width', width);
-        height && canvas.setAttribute('height', height);
+        width && canvas.setAttribute('height', width);
         editorRef.current?.render();
       }
     };

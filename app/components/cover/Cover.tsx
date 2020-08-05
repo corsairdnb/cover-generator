@@ -12,14 +12,20 @@ export const Cover: FC = () => {
   const [file, setFile] = useState<File | undefined>();
   const coverContainerRef = useRef<HTMLDivElement | null>(null);
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor({ coverContainerRef });
-
-  const { assets } = usePreset(editorRef, canvasRef, imageDataUrl);
+  const preset = usePreset(editorRef, canvasRef);
 
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    assets && assets.length && editor.addAssets(assets);
-  }, [imageDataUrl]);
+    preset
+      .then(({ assets }) => {
+        editor.addAssets(assets);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      });
+  }, []);
 
   const onImageChange = useCallback(
     (event: SyntheticEvent<HTMLInputElement>) =>
