@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useRef } from 'react';
-import { ImageAsset } from '../../editor/ImageAsset';
+import { Asset } from '../../editor/Asset';
 import logo from '../../assets/logo.png';
 import { Editor } from '../../editor/Editor';
 import { props } from './preset';
@@ -25,17 +25,12 @@ export const usePreset = async (
       logoRef.current = logo as string;
     }
 
-    const ctx = editor.ctx;
     const image = new Image();
     image.src = logoRef.current;
 
     // TODO: useMemo
     image.onload = () => {
-      const { maxWidth, bottom } = props;
-      const logoAsset = new ImageAsset(ctx, props, image);
-      const height = Math.round((maxWidth * image.height) / image.width);
-      const y = canvas.getBoundingClientRect().height - height - bottom;
-      logoAsset.attributes = new DOMRect(100, y, maxWidth, height);
+      const logoAsset = new Asset(props, image);
       // TODO: may be some array of assets
       resolveImage({ assets: [logoAsset] });
     };

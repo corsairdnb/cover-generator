@@ -3,7 +3,9 @@
 import { AssetProps } from '../../editor/types';
 
 export const props: AssetProps = {
+  left: 100,
+  right: 0,
   top: 0,
   bottom: 50,
-  maxWidth: 100
+  maxWidth: 200
 };

@@ -2,6 +2,7 @@ import { RefObject, useEffect, useRef } from 'react';
 import { throttle } from 'throttle-debounce';
 import { Editor } from '../../editor/Editor';
 import { debounceTime } from './constants';
+import { canvasWidth } from '../../editor/constants';
 
 export type Refs = {
   canvasRef: RefObject<HTMLCanvasElement>;
@@ -20,12 +21,8 @@ export const useCoverEditor = ({ coverContainerRef }: Params): Refs => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    let context: CanvasRenderingContext2D | undefined | null = null;
-    if (canvas) {
-      context = canvas.getContext('2d');
-    }
-    if (!editorRef.current && context) {
-      editorRef.current = new Editor(context);
+    if (!editorRef.current && canvas) {
+      editorRef.current = new Editor(canvas);
     }
   }, [canvasRef.current]);
 
@@ -35,7 +32,7 @@ export const useCoverEditor = ({ coverContainerRef }: Params): Refs => {
       const container = coverContainerRef.current;
       if (canvas && container) {
         const containerRect = container.getBoundingClientRect();
-        const width = Math.min(containerRect.width || 0, 700).toString();
+        const width = Math.min(containerRect.width || 0, canvasWidth).toString();
         // const height = container?.height.toString();
         width && canvas.setAttribute('width', width);
         width && canvas.setAttribute('height', width);
