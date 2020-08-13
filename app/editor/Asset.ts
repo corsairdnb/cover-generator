@@ -1,9 +1,15 @@
-import { AssetProps } from './types';
-
 export enum AssetOrientation {
   HORIZONTAL = 'horizontal',
   VERTICAL = 'vertical'
 }
+
+export type AssetProps = {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  maxWidth: number;
+};
 
 export class Asset {
   public assetOrientation: AssetOrientation = AssetOrientation.HORIZONTAL;

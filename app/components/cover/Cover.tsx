@@ -18,8 +18,9 @@ export const Cover: FC = () => {
     const editor = editorRef.current;
     if (!editor) return;
     preset
-      .then(({ assets }) => {
+      .then(({ assets, labels }) => {
         editor.addAssets(assets);
+        editor.addLabels(labels);
       })
       .catch((error) => {
         // eslint-disable-next-line no-console

@@ -1,4 +1,5 @@
-import { Asset } from '../../editor/Asset';
+import { Asset, AssetProps } from '../../editor/Asset';
+import { Label, LabelProps } from '../../editor/Label';
 
 export type EditorCallbacks = {
   onUpdateImageUrl: (dataUrl: string) => void;
@@ -6,6 +7,12 @@ export type EditorCallbacks = {
   onUpdateFile: (file?: File) => void;
 };
 
+export type InitialPreset = {
+  assets: AssetProps[];
+  labels: LabelProps[];
+};
+
 export type Preset = {
   assets: Asset[];
+  labels: Label[];
 };

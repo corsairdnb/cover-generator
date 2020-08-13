@@ -6,9 +6,11 @@ import {
   initialFontFamily
 } from './constants';
 import { Asset } from './Asset';
+import { Label } from './Label';
 
 export class Editor {
   private assets: Asset[] = [];
+  private labels: Label[] = [];
   private imageElement: HTMLImageElement | undefined;
   get image(): HTMLImageElement | undefined {
     return this.imageElement;
@@ -49,9 +51,16 @@ export class Editor {
     this.exportCanvas.height = exportHeight;
   }
 
-  private renderFonts(ctx: CanvasRenderingContext2D) {
-    ctx.font = `20px/0${this.fontFamily.padStart(this.fontFamily.length + 1)}`;
-    ctx.fillText('Test content', 100, 50);
+  private renderLabels(ctx: CanvasRenderingContext2D, scale = 0.5) {
+    this.labels.forEach((label) => {
+      const { text, left, top, fontSize } = label.props;
+      const size = fontSize * scale;
+      const x = left * scale;
+      const y = top * scale + size;
+      ctx.font = `${size}px/0${this.fontFamily.padStart(this.fontFamily.length + 1)}`;
+      ctx.fillStyle = 'red';
+      ctx.fillText(text, x, y);
+    });
   }
 
   private renderBackground(
@@ -67,22 +76,23 @@ export class Editor {
       const { maxWidth, bottom, left: x } = asset.props;
       const imageWidth = asset.image.width;
       const imageHeight = asset.image.height;
-      const width = Math.max(imageWidth, maxWidth) * scale;
-      const height = Math.round((width * imageHeight * scale) / width) * scale;
-      const y = ctx.canvas.height - height - bottom;
-      ctx.drawImage(asset.image, x, y, width, height);
+      const width = Math.min(imageWidth * scale, maxWidth) * scale;
+      const height = Math.round((width * imageHeight) / imageWidth);
+      const left = x * scale;
+      const top = ctx.canvas.height - height - bottom * scale;
+      ctx.drawImage(asset.image, left, top, width, height);
     });
   }
 
   public render() {
     this.renderBackground(this.ctx);
-    this.renderFonts(this.ctx);
+    this.renderLabels(this.ctx);
     this.renderAssets(this.ctx);
   }
 
   private renderExportContext() {
     this.renderBackground(this.exportCtx, exportWidth, exportHeight);
-    this.renderFonts(this.exportCtx);
+    this.renderLabels(this.exportCtx, 1);
     this.renderAssets(this.exportCtx, 1);
   }
 
@@ -95,5 +105,11 @@ export class Editor {
     this.assets = [...this.assets, ...assets];
     this.renderAssets(this.ctx);
     this.renderAssets(this.exportCtx);
+  }
+
+  public addLabels(labels: Label[]) {
+    this.labels = [...this.labels, ...labels];
+    this.renderLabels(this.ctx);
+    this.renderLabels(this.exportCtx);
   }
 }
