@@ -95,7 +95,7 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "cover-generator",
+      "owner": "corsairdnb",
       "repo": "cover-generator",
       "private": false
     }
