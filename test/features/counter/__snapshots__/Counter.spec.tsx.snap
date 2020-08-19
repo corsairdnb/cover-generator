@@ -3,7 +3,6 @@
 exports[`Counter component should match exact snapshot 1`] = `
 <div>
   <div
-    className="backButton"
     data-tid="backButton"
   >
     <a
@@ -16,16 +15,12 @@ exports[`Counter component should match exact snapshot 1`] = `
     </a>
   </div>
   <div
-    className="counter counter"
     data-tid="counter"
   >
     1
   </div>
-  <div
-    className="btnGroup"
-  >
+  <div>
     <button
-      className="btn"
       data-tclass="btn"
       onClick={[Function]}
       type="button"
@@ -35,7 +30,6 @@ exports[`Counter component should match exact snapshot 1`] = `
       />
     </button>
     <button
-      className="btn"
       data-tclass="btn"
       onClick={[Function]}
       type="button"
@@ -45,7 +39,6 @@ exports[`Counter component should match exact snapshot 1`] = `
       />
     </button>
     <button
-      className="btn"
       data-tclass="btn"
       onClick={[Function]}
       type="button"
@@ -53,7 +46,6 @@ exports[`Counter component should match exact snapshot 1`] = `
       odd
     </button>
     <button
-      className="btn"
       data-tclass="btn"
       onClick={[Function]}
       type="button"

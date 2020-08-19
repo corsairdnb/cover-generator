@@ -127,7 +127,11 @@
       "app/node_modules"
     ],
     "setupFiles": [
-      "./internals/scripts/CheckBuildsExist.js"
+      "./internals/scripts/CheckBuildsExist.js",
+      "./internals/scripts/setupTests.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ]
   },
   "devDependencies": {
