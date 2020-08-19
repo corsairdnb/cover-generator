@@ -10,6 +10,7 @@ export type LabelProps = {
 
 export class Label {
   constructor(readonly props: LabelProps) {
+    // eslint-disable-next-line no-console
     console.log(props);
   }
 

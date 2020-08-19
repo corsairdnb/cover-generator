@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import { app, BrowserWindow, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 
 type DarwinMenuItemConstructorOptions = {
   selector?: string;
@@ -183,7 +183,7 @@ export default class MenuBuilder {
   }
 
   buildDefaultTemplate() {
-    return [
+    const templateDefault = [
       {
         label: '&File',
         submenu: [
@@ -267,5 +267,7 @@ export default class MenuBuilder {
         ]
       }
     ];
+
+    return templateDefault;
   }
 }

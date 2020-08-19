@@ -3,7 +3,7 @@ import { debounce } from 'throttle-debounce';
 import { useCoverEditor } from './useCoverEditor';
 import { handleInputChange } from './handleInputChange';
 import { debounceTime } from './constants';
-import styles from './Cover.module.css';
+import styles from './Cover.module.scss';
 import { usePreset } from './usePreset';
 
 export const Cover: FC = () => {
@@ -61,29 +61,53 @@ export const Cover: FC = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.left}>
-        <p>
-          Choose File: <input type="file" id="file" ref={fileInputRef} onChange={onImageChange} />
-        </p>
-        {image && (
+        <div className={styles.content}>
           <p>
-            Image dimensions: {image.width}x{image.height}
+            Date: <input type="text" placeholder="31/12" />
           </p>
-        )}
-        {file && (
           <p>
-            <a href={imageDataUrl} download={file.name}>
-              Download image
-            </a>
+            Time: <input type="text" placeholder="19:00" />
           </p>
-        )}
-        <p>
-          Font family:{' '}
-          <input
-            type="text"
-            placeholder="Arial"
-            onInput={({ currentTarget: { value } }) => onFontFamilyInput(value)}
-          />
-        </p>
+          <p>
+            Program: <input type="text" placeholder="Xtra" />
+          </p>
+          <p>
+            Artists: <textarea placeholder="Name..." />
+          </p>
+        </div>
+        <div className={styles.design}>
+          <p>
+            Logo:{' '}
+            <select>
+              <option>Logo 1</option>
+              <option>Logo 2</option>
+              <option>Logo 3</option>
+            </select>
+          </p>
+          <p>
+            Choose File: <input type="file" id="file" ref={fileInputRef} onChange={onImageChange} />
+          </p>
+          {image && (
+            <p>
+              Image dimensions: {image.width}x{image.height}
+            </p>
+          )}
+          {file && (
+            <p>
+              <a href={imageDataUrl} download={file.name}>
+                Download image
+              </a>
+            </p>
+          )}
+          <p>
+            Font family:{' '}
+            <input
+              type="text"
+              placeholder="Arial"
+              onInput={({ currentTarget: { value } }) => onFontFamilyInput(value)}
+            />
+          </p>
+        </div>
       </div>
       <div className={styles.right} ref={coverContainerRef}>
         <canvas id="canvas" className={styles.cover} ref={canvasRef} />
