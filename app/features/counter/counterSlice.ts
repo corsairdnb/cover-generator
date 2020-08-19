@@ -41,3 +41,5 @@ export const incrementAsync = (delay = 1000): AppThunk => (dispatch) => {
 export default counterSlice.reducer;
 
 export const selectCount = (state: RootState) => state.counter.value;
+
+export const counterActions = counterSlice.actions;

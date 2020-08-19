@@ -21,9 +21,7 @@ export const usePreset = async (
   const labels: Label[] = [];
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const editor = editorRef.current;
-    if (!editor || !canvas) return;
+    if (!editorRef.current || !canvasRef.current) return;
 
     if (!logoRef.current) {
       logoRef.current = logo as string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Cover } from '../../../app/components/cover/Cover';
+import { Cover } from '../../../app/features/cover/Cover';
 
 describe('Cover', () => {
   it('should match snapshot', () => {

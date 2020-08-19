@@ -1,10 +1,13 @@
 import React, { FC, SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'throttle-debounce';
 import { useCoverEditor } from './useCoverEditor';
 import { handleInputChange } from './handleInputChange';
 import { debounceTime } from './constants';
 import styles from './Cover.module.scss';
 import { usePreset } from './usePreset';
+import { setDate } from './slice';
+import { dateSelector } from './selectors';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -13,6 +16,11 @@ export const Cover: FC = () => {
   const coverContainerRef = useRef<HTMLDivElement | null>(null);
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor({ coverContainerRef });
   const preset = usePreset(editorRef, canvasRef);
+
+  const dispatch = useDispatch();
+  dispatch(setDate('01/01'));
+
+  const date = useSelector(dateSelector);
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -63,7 +71,7 @@ export const Cover: FC = () => {
       <div className={styles.left}>
         <div className={styles.content}>
           <p>
-            Date: <input type="text" placeholder="31/12" />
+            Date: <input type="text" placeholder="31/12" defaultValue={date} />
           </p>
           <p>
             Time: <input type="text" placeholder="19:00" />

@@ -16,3 +16,8 @@ export type Preset = {
   assets: Asset[];
   labels: Label[];
 };
+
+export type Content = {
+  date: string;
+  time: string;
+};
