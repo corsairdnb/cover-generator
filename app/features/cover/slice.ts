@@ -1,15 +1,17 @@
 /* eslint-disable-next-line import/no-cycle */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Content } from './types';
+import { CONTENT_NAMESPACE } from './constants';
 //import { AppThunk } from '../../store';
 
 const initialState: Content = {
   date: '',
-  time: ''
+  time: '',
+  fontFamily: ''
 };
 
 const slice = createSlice({
-  name: 'counter',
+  name: CONTENT_NAMESPACE,
   initialState,
   reducers: {
     setDate: (state, { payload }: PayloadAction<string>) => {
@@ -17,12 +19,15 @@ const slice = createSlice({
     },
     setTime: (state, { payload }: PayloadAction<string>) => {
       state.time = payload;
+    },
+    setFontFamily: (state, { payload }: PayloadAction<string>) => {
+      state.fontFamily = payload;
     }
   }
 });
 
 export const contentActions = slice.actions;
-export const { setDate, setTime } = slice.actions;
+export const { setDate, setTime, setFontFamily } = slice.actions;
 
 //export const incrementIfOdd = (): AppThunk => {
 //  return (dispatch, getState) => {

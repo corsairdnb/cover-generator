@@ -20,4 +20,5 @@ export type Preset = {
 export type Content = {
   date: string;
   time: string;
+  fontFamily: string;
 };

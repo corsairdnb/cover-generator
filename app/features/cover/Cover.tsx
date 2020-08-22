@@ -6,7 +6,7 @@ import { handleInputChange } from './handleInputChange';
 import { debounceTime } from './constants';
 import styles from './Cover.module.scss';
 import { usePreset } from './usePreset';
-import { setDate } from './slice';
+import { setDate, setFontFamily } from './slice';
 import { dateSelector } from './selectors';
 
 export const Cover: FC = () => {
@@ -16,9 +16,7 @@ export const Cover: FC = () => {
   const coverContainerRef = useRef<HTMLDivElement | null>(null);
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor({ coverContainerRef });
   const preset = usePreset(editorRef, canvasRef);
-
   const dispatch = useDispatch();
-  dispatch(setDate('01/01'));
 
   const date = useSelector(dateSelector);
 
@@ -46,24 +44,23 @@ export const Cover: FC = () => {
     [editorRef.current]
   );
 
-  const setNewDataUrl = useCallback(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    setImageDataUrl(editor.getDataUrl());
-  }, [editorRef.current]);
-
   const fontInputCallback = useCallback(
     (value: string) => {
       const editor = editorRef.current;
       if (!editor) return;
       editor.font = value;
-      setNewDataUrl();
+      setImageDataUrl(editor.getDataUrl());
     },
     [editorRef.current]
   );
 
   const onFontFamilyInput = debounce(debounceTime, (value: string) => {
     fontInputCallback(value);
+    dispatch(setFontFamily(value));
+  });
+
+  const onDateInput = debounce(debounceTime, (value: string) => {
+    dispatch(setDate(value));
   });
 
   return (
@@ -71,7 +68,13 @@ export const Cover: FC = () => {
       <div className={styles.left}>
         <div className={styles.content}>
           <p>
-            Date: <input type="text" placeholder="31/12" defaultValue={date} />
+            Date:{' '}
+            <input
+              type="text"
+              placeholder="31/12"
+              defaultValue={date}
+              onInput={({ currentTarget: { value } }) => onDateInput(value)}
+            />
           </p>
           <p>
             Time: <input type="text" placeholder="19:00" />

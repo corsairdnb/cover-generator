@@ -85,12 +85,14 @@ export class Editor {
   }
 
   public render() {
+    this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     this.renderBackground(this.ctx);
     this.renderLabels(this.ctx);
     this.renderAssets(this.ctx);
   }
 
   private renderExportContext() {
+    this.exportCtx.clearRect(0, 0, exportWidth, exportHeight);
     this.renderBackground(this.exportCtx, exportWidth, exportHeight);
     this.renderLabels(this.exportCtx, 1);
     this.renderAssets(this.exportCtx, 1);
