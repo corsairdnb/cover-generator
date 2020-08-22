@@ -4,7 +4,7 @@ import { Content } from './types';
 import { CONTENT_NAMESPACE } from './constants';
 //import { AppThunk } from '../../store';
 
-const initialState: Content = {
+export const initialContentState: Content = {
   date: '',
   time: '',
   fontFamily: ''
@@ -12,7 +12,7 @@ const initialState: Content = {
 
 const slice = createSlice({
   name: CONTENT_NAMESPACE,
-  initialState,
+  initialState: initialContentState,
   reducers: {
     setDate: (state, { payload }: PayloadAction<string>) => {
       state.date = payload;

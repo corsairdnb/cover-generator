@@ -11,8 +11,10 @@ exports[`Cover should match snapshot 1`] = `
       className="content"
     >
       <p>
-        Date: 
+        Date:
+         
         <input
+          onInput={[Function]}
           placeholder="31/12"
           type="text"
         />
