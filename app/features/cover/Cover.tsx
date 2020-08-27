@@ -8,6 +8,7 @@ import styles from './Cover.module.scss';
 import { usePreset } from './usePreset';
 import { setDate, setFontFamily } from './slice';
 import { dateSelector } from './selectors';
+import { Label, LabelProps } from '../../editor/Label';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -61,6 +62,16 @@ export const Cover: FC = () => {
 
   const onDateInput = debounce(debounceTime, (value: string) => {
     dispatch(setDate(value));
+    const labelProps: LabelProps = {
+      text: value,
+      left: 100,
+      top: 100,
+      bottom: 0,
+      right: 0,
+      fontSize: 30,
+      maxWidth: 0
+    };
+    editorRef.current?.addLabels([new Label(labelProps, 'date')]);
   });
 
   return (

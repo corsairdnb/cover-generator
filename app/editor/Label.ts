@@ -9,7 +9,7 @@ export type LabelProps = {
 };
 
 export class Label {
-  constructor(readonly props: LabelProps) {
+  constructor(readonly props: LabelProps, readonly id: string) {
     // eslint-disable-next-line no-console
     console.log(props);
   }
