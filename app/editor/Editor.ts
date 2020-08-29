@@ -63,8 +63,8 @@ export class Editor {
 
   private renderLabels() {
     this.contexts.forEach(({ ctx, scale }) => {
-      // TODO
-      this.labels.forEach((label) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(this.labels).forEach(([_id, label]) => {
         const { text, left, top, fontSize } = label.props;
         const size = fontSize * scale;
         const x = left * scale;
@@ -117,7 +117,7 @@ export class Editor {
   }
 
   public getDataUrl() {
-    this.renderExportContext();
+    this.render();
     return this.exportCanvas.toDataURL('image/jpeg', 1);
   }
 
@@ -130,6 +130,9 @@ export class Editor {
     labels.forEach((label) => {
       if (!this.labels[label.id]) {
         this.labels[label.id] = label;
+      } else {
+        const oldLabel = this.labels[label.id];
+        this.labels[label.id] = { ...oldLabel, ...label };
       }
     });
     this.render();

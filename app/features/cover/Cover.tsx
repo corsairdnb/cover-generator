@@ -7,8 +7,8 @@ import { debounceTime } from './constants';
 import styles from './Cover.module.scss';
 import { usePreset } from './usePreset';
 import { setDate, setFontFamily } from './slice';
-import { dateSelector } from './selectors';
-import { Label, LabelProps } from '../../editor/Label';
+import { dateSelector, fontFamilySelector } from './selectors';
+import { Label, dateLabelProps, dateId } from '../../editor/Label';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -20,6 +20,25 @@ export const Cover: FC = () => {
   const dispatch = useDispatch();
 
   const date = useSelector(dateSelector);
+  const updateDate = useCallback((props) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.addLabels([new Label(props, dateId)]);
+    // TODO: make it reactive, don't update manually
+    setImageDataUrl(editor.getDataUrl());
+  }, []);
+
+  const fontFamily = useSelector(fontFamilySelector);
+  const updateFontFamily = useCallback(
+    (value: string) => {
+      const editor = editorRef.current;
+      if (!editor) return;
+      editor.font = value;
+      // TODO: make it reactive, don't update manually
+      setImageDataUrl(editor.getDataUrl());
+    },
+    [editorRef.current]
+  );
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -33,6 +52,8 @@ export const Cover: FC = () => {
         // eslint-disable-next-line no-console
         console.log(error);
       });
+    updateDate({ ...dateLabelProps, text: date });
+    updateFontFamily(fontFamily);
   }, []);
 
   const onImageChange = useCallback(
@@ -45,33 +66,14 @@ export const Cover: FC = () => {
     [editorRef.current]
   );
 
-  const fontInputCallback = useCallback(
-    (value: string) => {
-      const editor = editorRef.current;
-      if (!editor) return;
-      editor.font = value;
-      setImageDataUrl(editor.getDataUrl());
-    },
-    [editorRef.current]
-  );
-
   const onFontFamilyInput = debounce(debounceTime, (value: string) => {
-    fontInputCallback(value);
     dispatch(setFontFamily(value));
+    updateFontFamily(value);
   });
 
-  const onDateInput = debounce(debounceTime, (value: string) => {
-    dispatch(setDate(value));
-    const labelProps: LabelProps = {
-      text: value,
-      left: 100,
-      top: 100,
-      bottom: 0,
-      right: 0,
-      fontSize: 30,
-      maxWidth: 0
-    };
-    editorRef.current?.addLabels([new Label(labelProps, 'date')]);
+  const onDateInput = debounce(debounceTime, (text: string) => {
+    dispatch(setDate(text));
+    updateDate({ ...dateLabelProps, text });
   });
 
   return (
@@ -109,16 +111,10 @@ export const Cover: FC = () => {
           <p>
             Choose File: <input type="file" id="file" ref={fileInputRef} onChange={onImageChange} />
           </p>
+
           {image && (
             <p>
               Image dimensions: {image.width}x{image.height}
-            </p>
-          )}
-          {file && (
-            <p>
-              <a href={imageDataUrl} download={file.name}>
-                Download image
-              </a>
             </p>
           )}
           <p>
@@ -126,10 +122,22 @@ export const Cover: FC = () => {
             <input
               type="text"
               placeholder="Arial"
+              defaultValue={fontFamily}
               onInput={({ currentTarget: { value } }) => onFontFamilyInput(value)}
             />
           </p>
         </div>
+        {file && (
+          <div className={styles.output}>
+            {file && (
+              <p>
+                <a href={imageDataUrl} download={file.name}>
+                  Download image
+                </a>
+              </p>
+            )}
+          </div>
+        )}
       </div>
       <div className={styles.right} ref={coverContainerRef}>
         <canvas id="canvas" className={styles.cover} ref={canvasRef} />

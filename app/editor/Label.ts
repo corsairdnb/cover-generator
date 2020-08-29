@@ -19,3 +19,15 @@ export class Label {
   //    this.ctx.drawImage(this.image, this.attrs.x, this.attrs.y, this.attrs.width, this.attrs.height);
   //  }
 }
+
+export const dateLabelProps: LabelProps = {
+  text: '',
+  left: 100,
+  top: 100,
+  bottom: 0,
+  right: 0,
+  fontSize: 80,
+  maxWidth: 0
+};
+
+export const dateId = 'date';

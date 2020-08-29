@@ -27,8 +27,8 @@ export const usePreset = async (
       logoRef.current = logo as string;
     }
 
-    const label = new Label(initialPreset.labels[0]);
-    labels.push(label);
+    //    const label = new Label(initialPreset.labels[0], '');
+    //    labels.push(label);
 
     const logoImage = new Image();
     logoImage.src = logoRef.current;
