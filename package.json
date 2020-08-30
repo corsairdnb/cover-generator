@@ -37,17 +37,17 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "cross-env NODE_ENV=development eslint --cache"
+      "cross-env --config .eslintrc.js NODE_ENV=development eslint --caches"
     ],
     "{*.json,.{babelrc,eslintrc,prettierrc,stylelintrc}}": [
-      "prettier --ignore-path .eslintignore --parser json --write"
+      "prettier --config .prettierrc.js --ignore-path .eslintignore --parser json --write"
     ],
     "*.{css,scss}": [
-      "stylelint --ignore-path .eslintignore --syntax scss --fix",
-      "prettier --ignore-path .eslintignore --single-quote --write"
+      "stylelint --config .stylelintrc.js --ignore-path .eslintignore --syntax scss --fix",
+      "prettier --config .prettierrc.js --ignore-path .eslintignore --write"
     ],
     "*.{html,md,yml}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
+      "prettier --config .prettierrc.js --ignore-path .eslintignore --write"
     ]
   },
   "build": {
@@ -109,31 +109,6 @@
     "email": "dmitry.rychkov@gmail.com"
   },
   "license": "MIT",
-  "jest": {
-    "testURL": "http://localhost/",
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/fileMock.js",
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "app/node_modules"
-    ],
-    "setupFiles": [
-      "./internals/scripts/CheckBuildsExist.js",
-      "./internals/scripts/setupTests.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
-  },
   "devDependencies": {
     "@amilajack/testcafe-browser-provider-electron": "^0.0.15-alpha.1",
     "@babel/core": "^7.11.1",
@@ -277,35 +252,6 @@
   "browserslist": [
     "extends browserslist-config-erb"
   ],
-  "prettier": {
-    "singleQuote": true,
-    "arrowParens": "always",
-    "printWidth": 100,
-    "overrides": [
-      {
-        "files": [
-          "*.css",
-          "*.scss"
-        ],
-        "options": {
-          "singleQuote": false
-        }
-      },
-      {
-        "files": [
-          ".prettierrc",
-          ".babelrc",
-          ".eslintrc",
-          ".stylelintrc"
-        ],
-        "options": {
-          "parser": "json"
-        }
-      }
-    ],
-    "quoteProps": "preserve",
-    "trailingComma": "none"
-  },
   "renovate": {
     "extends": [
       "bliss"
