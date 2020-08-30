@@ -1,10 +1,10 @@
 /* eslint-disable-next-line import/no-cycle */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Content } from './types';
+import { ContentState } from './types';
 import { CONTENT_NAMESPACE } from './constants';
 //import { AppThunk } from '../../store';
 
-export const initialContentState: Content = {
+export const initialContentState: ContentState = {
   date: '',
   time: '',
   fontFamily: ''

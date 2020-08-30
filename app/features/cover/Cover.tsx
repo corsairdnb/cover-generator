@@ -1,14 +1,11 @@
 import React, { FC, SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { debounce } from 'throttle-debounce';
 import { useCoverEditor } from './useCoverEditor';
 import { handleInputChange } from './handleInputChange';
-import { debounceTime } from './constants';
-import styles from './Cover.module.scss';
 import { usePreset } from './usePreset';
-import { setDate, setFontFamily } from './slice';
-import { dateSelector, fontFamilySelector } from './selectors';
-import { Label, dateLabelProps, dateId } from '../../editor/Label';
+import { useDate } from './hooks/useDate';
+import { useFontFamily } from './hooks/useFontFamily';
+
+import styles from './Cover.module.scss';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -17,28 +14,15 @@ export const Cover: FC = () => {
   const coverContainerRef = useRef<HTMLDivElement | null>(null);
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor({ coverContainerRef });
   const preset = usePreset(editorRef, canvasRef);
-  const dispatch = useDispatch();
 
-  const date = useSelector(dateSelector);
-  const updateDate = useCallback((props) => {
+  const onFieldChange = () => {
     const editor = editorRef.current;
     if (!editor) return;
-    editor.addLabels([new Label(props, dateId)]);
-    // TODO: make it reactive, don't update manually
     setImageDataUrl(editor.getDataUrl());
-  }, []);
+  };
 
-  const fontFamily = useSelector(fontFamilySelector);
-  const updateFontFamily = useCallback(
-    (value: string) => {
-      const editor = editorRef.current;
-      if (!editor) return;
-      editor.font = value;
-      // TODO: make it reactive, don't update manually
-      setImageDataUrl(editor.getDataUrl());
-    },
-    [editorRef.current]
-  );
+  const { onInput: onDateInput, value: date } = useDate(editorRef, onFieldChange);
+  const { onInput: onFontFamilyInput, value: fontFamily } = useFontFamily(editorRef, onFieldChange);
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -52,8 +36,6 @@ export const Cover: FC = () => {
         // eslint-disable-next-line no-console
         console.log(error);
       });
-    updateDate({ ...dateLabelProps, text: date });
-    updateFontFamily(fontFamily);
   }, []);
 
   const onImageChange = useCallback(
@@ -65,16 +47,6 @@ export const Cover: FC = () => {
       }),
     [editorRef.current]
   );
-
-  const onFontFamilyInput = debounce(debounceTime, (value: string) => {
-    dispatch(setFontFamily(value));
-    updateFontFamily(value);
-  });
-
-  const onDateInput = debounce(debounceTime, (text: string) => {
-    dispatch(setDate(text));
-    updateDate({ ...dateLabelProps, text });
-  });
 
   return (
     <div className={styles.wrapper}>

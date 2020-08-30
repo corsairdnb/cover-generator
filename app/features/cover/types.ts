@@ -17,8 +17,13 @@ export type Preset = {
   labels: Label[];
 };
 
-export type Content = {
+export type ContentState = {
   date: string;
   time: string;
   fontFamily: string;
+};
+
+export type CoverEditorHook = {
+  value: string;
+  onInput: (text: string) => void;
 };

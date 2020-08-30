@@ -37,7 +37,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "cross-env --config .eslintrc.js NODE_ENV=development eslint --caches"
+      "cross-env NODE_ENV=development eslint --cache --config .eslintrc.js"
     ],
     "{*.json,.{babelrc,eslintrc,prettierrc,stylelintrc}}": [
       "prettier --config .prettierrc.js --ignore-path .eslintignore --parser json --write"
