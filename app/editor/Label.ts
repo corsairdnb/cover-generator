@@ -1,11 +1,14 @@
 export type LabelProps = {
+  id: string;
   text: string;
+  textAfter: string;
   left: number;
   right: number;
   top: number;
   bottom: number;
   maxWidth: number;
   fontSize: number;
+  color: string;
 };
 
 export class Label {

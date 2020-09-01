@@ -2,18 +2,18 @@ import { RefObject, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'throttle-debounce';
 import { debounceTime } from '../constants';
-import { setDate } from '../slice';
+import { setTime } from '../slice';
 import { LabelProps } from '../../../editor/Label';
 import { CoverEditorHook } from '../types';
-import { dateSelector } from '../selectors';
+import { timeSelector } from '../selectors';
 import { Editor } from '../../../editor/Editor';
 
 const labelProps: LabelProps = {
-  id: 'date',
+  id: 'time',
   text: '',
   textAfter: ', ',
   left: 100,
-  top: 100,
+  top: 200,
   bottom: 0,
   right: 0,
   fontSize: 80,
@@ -21,13 +21,13 @@ const labelProps: LabelProps = {
   color: '#fff'
 };
 
-export const useDate = (
+export const useTime = (
   editorRef: RefObject<Editor>,
   onFieldChange: () => void,
   onUpdate: (props: LabelProps) => void
 ): CoverEditorHook => {
   const dispatch = useDispatch();
-  const value = useSelector(dateSelector);
+  const value = useSelector(timeSelector);
 
   //  const update = useCallback((props) => {
   //    const editor = editorRef.current;
@@ -41,7 +41,7 @@ export const useDate = (
   }, [editorRef.current]);
 
   const onInput = debounce(debounceTime, (text: string) => {
-    dispatch(setDate(text));
+    dispatch(setTime(text));
     onUpdate({ ...labelProps, text });
     onFieldChange();
   });

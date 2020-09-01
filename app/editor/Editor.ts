@@ -65,13 +65,23 @@ export class Editor {
     this.contexts.forEach(({ ctx, scale }) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(this.labels).forEach(([_id, label]) => {
-        const { text, left, top, fontSize } = label.props;
+        const { text, left, top, fontSize, color } = label.props;
+        const line = text.toUpperCase();
         const size = fontSize * scale;
         const x = left * scale;
         const y = top * scale + size;
-        ctx.font = `${size}px/0${this.fontFamily.padStart(this.fontFamily.length + 1)}`;
-        ctx.fillStyle = 'red';
-        ctx.fillText(text, x, y);
+        const lines = line.split('\n');
+        ctx.font = `${size}px/1em${this.fontFamily.padStart(this.fontFamily.length + 1)}`;
+        ctx.fillStyle = color;
+        if (lines.length === 1) {
+          ctx.fillText(line, x, y);
+        } else {
+          let offset = 0;
+          for (let i = 0; i < lines.length; i++) {
+            ctx.fillText(lines[i], x, y + offset);
+            offset += size;
+          }
+        }
       });
     });
   }
@@ -82,6 +92,10 @@ export class Editor {
     height = canvasHeight
   ) {
     this.image && ctx.drawImage(this.image, 0, 0, width, height);
+    ctx.fillStyle = '#000';
+    ctx.globalAlpha = 0.7;
+    ctx.fillRect(0, 0, width, height);
+    ctx.globalAlpha = 1;
   }
 
   private renderAssets() {

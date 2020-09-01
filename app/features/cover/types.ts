@@ -21,6 +21,8 @@ export type ContentState = {
   date: string;
   time: string;
   fontFamily: string;
+  program: string;
+  artist: string;
 };
 
 export type CoverEditorHook = {

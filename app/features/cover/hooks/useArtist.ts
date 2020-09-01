@@ -1,48 +1,47 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'throttle-debounce';
 import { debounceTime } from '../constants';
-import { setDate } from '../slice';
-import { LabelProps } from '../../../editor/Label';
+import { setArtist } from '../slice';
+import { Label, LabelProps } from '../../../editor/Label';
 import { CoverEditorHook } from '../types';
-import { dateSelector } from '../selectors';
+import { artistSelector } from '../selectors';
 import { Editor } from '../../../editor/Editor';
 
 const labelProps: LabelProps = {
-  id: 'date',
+  id: 'artist',
   text: '',
   textAfter: ', ',
   left: 100,
-  top: 100,
+  top: 200,
   bottom: 0,
   right: 0,
   fontSize: 80,
   maxWidth: 0,
-  color: '#fff'
+  color: '#ff0000'
 };
 
-export const useDate = (
+export const useArtist = (
   editorRef: RefObject<Editor>,
-  onFieldChange: () => void,
-  onUpdate: (props: LabelProps) => void
+  onFieldChange: () => void
 ): CoverEditorHook => {
   const dispatch = useDispatch();
-  const value = useSelector(dateSelector);
+  const value = useSelector(artistSelector);
 
-  //  const update = useCallback((props) => {
-  //    const editor = editorRef.current;
-  //    if (!editor) return;
-  //    editor.addLabels([new Label(props, labelProps.id)]);
-  //  }, []);
+  const update = useCallback((props) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.addLabels([new Label(props, labelProps.id)]);
+  }, []);
 
   useEffect(() => {
     if (!editorRef.current) return;
-    onUpdate({ ...labelProps, text: value });
+    update({ ...labelProps, text: value });
   }, [editorRef.current]);
 
   const onInput = debounce(debounceTime, (text: string) => {
-    dispatch(setDate(text));
-    onUpdate({ ...labelProps, text });
+    dispatch(setArtist(text));
+    update({ ...labelProps, text });
     onFieldChange();
   });
 

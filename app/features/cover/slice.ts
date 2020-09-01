@@ -7,7 +7,9 @@ import { CONTENT_NAMESPACE } from './constants';
 export const initialContentState: ContentState = {
   date: '',
   time: '',
-  fontFamily: ''
+  fontFamily: '',
+  artist: '',
+  program: ''
 };
 
 const slice = createSlice({
@@ -22,12 +24,18 @@ const slice = createSlice({
     },
     setFontFamily: (state, { payload }: PayloadAction<string>) => {
       state.fontFamily = payload;
+    },
+    setArtist: (state, { payload }: PayloadAction<string>) => {
+      state.artist = payload;
+    },
+    setProgram: (state, { payload }: PayloadAction<string>) => {
+      state.program = payload;
     }
   }
 });
 
 export const contentActions = slice.actions;
-export const { setDate, setTime, setFontFamily } = slice.actions;
+export const { setDate, setTime, setFontFamily, setArtist, setProgram } = slice.actions;
 
 //export const incrementIfOdd = (): AppThunk => {
 //  return (dispatch, getState) => {
