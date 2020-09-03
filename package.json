@@ -51,8 +51,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
+    "productName": "Cover Generator",
+    "appId": "",
     "files": [
       "dist/",
       "node_modules/",
