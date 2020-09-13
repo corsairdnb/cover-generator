@@ -20,7 +20,10 @@ export const initialPreset: InitialPreset = {
       bottom: 0,
       top: 100,
       maxWidth: 1000,
-      fontSize: 100
+      fontSize: 100,
+      id: 'test',
+      textAfter: '',
+      color: '#ff0'
     }
   ]
 };

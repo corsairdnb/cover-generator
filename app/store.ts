@@ -4,8 +4,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { configureStore, getDefaultMiddleware, Action, EnhancedStore } from '@reduxjs/toolkit';
-import { createHashHistory } from 'history';
-import { routerMiddleware } from 'connected-react-router';
+//import { createHashHistory } from 'history';
+//import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import { ThunkAction } from 'redux-thunk';
 import {
@@ -22,18 +22,18 @@ import storage from 'redux-persist/lib/storage';
 // eslint-disable-next-line import/no-cycle
 import { createRootReducer } from './rootReducer';
 
-export const history = createHashHistory();
-const rootReducer = createRootReducer(history);
+//export const history = createHashHistory();
+const rootReducer = createRootReducer();
 export type RootState = ReturnType<typeof rootReducer>;
 
-const router = routerMiddleware(history);
+//const router = routerMiddleware(history);
 const middleware = [
   ...getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
     }
-  }),
-  router
+  })
+  //  router
 ];
 
 const excludeLoggerEnvs = ['test', 'production'];

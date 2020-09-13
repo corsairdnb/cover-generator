@@ -1,21 +1,23 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+//import { ConnectedRouter } from 'connected-react-router';
 import { hot } from 'react-hot-loader/root';
-import { History } from 'history';
+//import { History } from 'history';
 import { Store } from '../store';
-import Routes from '../Routes';
+//import Routes from '../Routes';
+import HomePage from './HomePage';
 
 type Props = {
   store: Store;
-  history: History;
+  //  history: History;
 };
 
-const Root = ({ store, history }: Props) => (
+const Root = ({ store /*history*/ }: Props) => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Routes />
-    </ConnectedRouter>
+    {/*<ConnectedRouter history={history}>*/}
+    {/*  <Routes />*/}
+    {/*</ConnectedRouter>*/}
+    <HomePage />
   </Provider>
 );
 

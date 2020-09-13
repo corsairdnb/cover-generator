@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import { RouterState } from 'connected-react-router';
+//import { RouterState } from 'connected-react-router';
 import { render } from 'react-dom';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
-import { history, configuredStore } from './store';
+import { configuredStore } from './store';
 import './app.global.scss';
 import { initialContentState } from './features/cover/slice';
 
@@ -10,8 +10,8 @@ const store = configuredStore({
   content: initialContentState,
   counter: {
     value: 0
-  },
-  router: {} as RouterState
+  }
+  //  router: {} as RouterState
 });
 
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const Root = require('./containers/Root').default;
   render(
     <AppContainer>
-      <Root store={store} history={history} />
+      <Root store={store} />
     </AppContainer>,
     document.getElementById('root')
   );
