@@ -140,7 +140,7 @@ export class Editor {
     this.render();
   }
 
-  public addLabels(labels: Label[]) {
+  public setLabels(labels: Label[]) {
     labels.forEach((label) => {
       if (!this.labels[label.id]) {
         this.labels[label.id] = label;

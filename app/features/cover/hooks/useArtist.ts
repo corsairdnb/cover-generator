@@ -31,7 +31,7 @@ export const useArtist = (
   const update = useCallback((props) => {
     const editor = editorRef.current;
     if (!editor) return;
-    editor.addLabels([new Label(props, labelProps.id)]);
+    editor.setLabels([new Label(props, labelProps.id)]);
   }, []);
 
   useEffect(() => {

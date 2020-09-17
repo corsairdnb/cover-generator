@@ -1,17 +1,18 @@
-import React, { FC, SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useCoverEditor } from './useCoverEditor';
-import { handleInputChange } from './handleInputChange';
 import { usePreset } from './usePreset';
 import { useDate } from './hooks/useDate';
 import { useFontFamily } from './hooks/useFontFamily';
 import { useTime } from './hooks/useTime';
 import { useProgram } from './hooks/useProgram';
 import { useArtist } from './hooks/useArtist';
+import { useImage } from './hooks/useImage';
 import { Label, LabelProps } from '../../editor/Label';
 import styles from './Cover.module.scss';
 import { dateSelector, programSelector, timeSelector } from './selectors';
 
+// eslint-disable-next-line max-statements
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
   const [image, setImage] = useState<HTMLImageElement | undefined>();
@@ -26,16 +27,16 @@ export const Cover: FC = () => {
     setImageDataUrl(editor.getDataUrl());
   };
 
-  const date1 = useSelector(dateSelector);
-  const time1 = useSelector(timeSelector);
-  const program1 = useSelector(programSelector);
+  const stateDate = useSelector(dateSelector);
+  const stateTime = useSelector(timeSelector);
+  const stateProgram = useSelector(programSelector);
 
   const onUpdate = useCallback(() => {
     const editor = editorRef.current;
     if (!editor) return;
     const labelProps: LabelProps = {
       id: 'firstLine',
-      text: `${date1}, ${time1}, ${program1}`,
+      text: `${stateDate}, ${stateTime}, ${stateProgram}`,
       textAfter: '',
       left: 100,
       top: 100,
@@ -45,8 +46,12 @@ export const Cover: FC = () => {
       maxWidth: 0,
       color: '#fff'
     };
-    editor.addLabels([new Label(labelProps, labelProps.id)]);
-  }, [date1, time1, program1]);
+    editor.setLabels([new Label(labelProps, labelProps.id)]);
+  }, [stateDate, stateTime, stateProgram]);
+
+  const onDataUrlChange = (value: string) => setImageDataUrl(value);
+  const onFileChange = (f: File) => setFile(f);
+  const onImageChange = (img: HTMLImageElement) => setImage(img);
 
   const { onInput: onDateInput, value: date } = useDate(editorRef, onFieldChange, onUpdate);
   const { onInput: onFontFamilyInput, value: fontFamily } = useFontFamily(editorRef, onFieldChange);
@@ -57,6 +62,13 @@ export const Cover: FC = () => {
     onUpdate
   );
   const { onInput: onArtistInput, value: artist } = useArtist(editorRef, onFieldChange);
+  const { onImageInput } = useImage(
+    editorRef,
+    onFieldChange,
+    onDataUrlChange,
+    onFileChange,
+    onImageChange
+  );
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -64,23 +76,13 @@ export const Cover: FC = () => {
     preset
       .then(({ assets, labels }) => {
         editor.addAssets(assets);
-        editor.addLabels(labels);
+        editor.setLabels(labels);
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.log(error);
       });
   }, []);
-
-  const onImageChange = useCallback(
-    (event: SyntheticEvent<HTMLInputElement>) =>
-      handleInputChange(event, editorRef.current, {
-        onUpdateImageUrl: setImageDataUrl,
-        onUpdateImage: setImage,
-        onUpdateFile: setFile
-      }),
-    [editorRef.current]
-  );
 
   return (
     <div className={styles.wrapper}>
@@ -132,8 +134,7 @@ export const Cover: FC = () => {
           {/*  </select>*/}
           {/*</p>*/}
           <p>
-            Choose Image:{' '}
-            <input type="file" id="file" ref={fileInputRef} onChange={onImageChange} />
+            Choose Image: <input type="file" id="file" ref={fileInputRef} onChange={onImageInput} />
           </p>
 
           {image && (

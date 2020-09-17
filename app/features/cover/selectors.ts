@@ -9,3 +9,4 @@ export const fontFamilySelector = createSelector(contentSelector, (content) => c
 export const timeSelector = createSelector(contentSelector, (content) => content.time);
 export const artistSelector = createSelector(contentSelector, (content) => content.artist);
 export const programSelector = createSelector(contentSelector, (content) => content.program);
+export const imageSelector = createSelector(contentSelector, (content) => content.image);

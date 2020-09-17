@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { Asset, AssetProps } from '../../editor/Asset';
 import { Label, LabelProps } from '../../editor/Label';
 
@@ -23,9 +24,14 @@ export type ContentState = {
   fontFamily: string;
   program: string;
   artist: string;
+  image: string;
 };
 
 export type CoverEditorHook = {
   value: string;
   onInput: (text: string) => void;
+};
+
+export type CoverEditorImageHook = {
+  onImageInput: (event: ChangeEvent<HTMLInputElement>) => void;
 };
