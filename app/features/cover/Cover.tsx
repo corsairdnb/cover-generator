@@ -19,7 +19,7 @@ export const Cover: FC = () => {
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor({ coverContainerRef });
   const preset = usePreset(editorRef, canvasRef);
   const content = useContent();
-  const { firstLine, fileName, date, time, program, artist, fontFamily } = content;
+  const { firstLine, fileName, date, time, program, artist, fontFamily, color } = content;
 
   const onUpdate = useCallback(() => {
     const editor = editorRef.current;
@@ -37,8 +37,9 @@ export const Cover: FC = () => {
       color: '#fff'
     };
     editor.setLabels([new Label(labelProps, labelProps.id)]);
+    editor.logoColor = color;
     setImageDataUrl(editor.getDataUrl());
-  }, [editorRef.current, { ...content }]);
+  }, [editorRef.current, firstLine, artist, fontFamily, color]);
 
   const onFieldChange = useCallback(() => {
     const editor = editorRef.current;
@@ -49,7 +50,7 @@ export const Cover: FC = () => {
   useEffect(() => {
     if (!editorRef.current) return;
     onUpdate();
-  }, [editorRef.current, onUpdate, { ...content }]);
+  }, [editorRef.current, onUpdate]);
 
   const onDataUrlChange = (value: string) => setImageDataUrl(value);
   const onImageChange = (img: HTMLImageElement) => setImage(img);

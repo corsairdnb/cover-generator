@@ -9,6 +9,7 @@ export type AssetProps = {
   top: number;
   bottom: number;
   maxWidth: number;
+  id: string;
 };
 
 export class Asset {

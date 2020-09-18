@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import {
   artistSelector,
+  colorSelector,
   dateSelector,
   fileNameSelector,
   firstLineSelector,
@@ -17,6 +18,7 @@ export const useContent = () => {
   const program = useSelector(programSelector);
   const artist = useSelector(artistSelector);
   const fontFamily = useSelector(fontFamilySelector);
+  const color = useSelector(colorSelector);
 
-  return { firstLine, fileName, date, time, program, artist, fontFamily };
+  return { firstLine, fileName, date, time, program, artist, fontFamily, color };
 };

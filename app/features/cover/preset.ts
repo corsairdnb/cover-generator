@@ -5,6 +5,7 @@ import { InitialPreset, Program } from './types';
 export const initialPreset: InitialPreset = {
   assets: [
     {
+      id: '11thradio',
       left: 100,
       right: 0,
       top: 0,

@@ -13,6 +13,19 @@ export class Editor {
   private assets: Asset[] = [];
   private labels: EditorLabels = {};
   private imageElement: HTMLImageElement | undefined;
+  private logoImage: HTMLImageElement | undefined;
+  private logoColorCode = '#fff';
+
+  set logoColor(value: string) {
+    this.logoColorCode = value;
+    this.render();
+  }
+
+  set logo(value: HTMLImageElement) {
+    this.logoImage = value;
+    this.render();
+  }
+
   get image(): HTMLImageElement | undefined {
     return this.imageElement;
   }
@@ -35,13 +48,16 @@ export class Editor {
   }
 
   private exportCanvas = document.createElement('canvas');
+  private logoCanvas = document.createElement('canvas');
   private exportCtx: CanvasRenderingContext2D;
+  private logoCtx: CanvasRenderingContext2D;
   public readonly ctx: CanvasRenderingContext2D;
   private contexts: ContextConfig[] = [];
 
   constructor(readonly canvas: HTMLCanvasElement) {
     this.ctx = canvas.getContext('2d')!;
     this.exportCtx = this.exportCanvas.getContext('2d')!;
+    this.logoCtx = this.logoCanvas.getContext('2d')!;
     this.initExportContext();
 
     this.contexts = [
@@ -98,6 +114,24 @@ export class Editor {
     ctx.globalAlpha = 1;
   }
 
+  private static hexToRGB(h: string): [number, number, number] {
+    let r;
+    let g;
+    let b;
+
+    if (h.length === 4) {
+      r = `0x${h[1]}${h[1]}`;
+      g = `0x${h[2]}${h[2]}`;
+      b = `0x${h[3]}${h[3]}`;
+    } else if (h.length === 7) {
+      r = `0x${h[1]}${h[2]}`;
+      g = `0x${h[3]}${h[4]}`;
+      b = `0x${h[5]}${h[6]}`;
+    }
+
+    return [Number(r), Number(g), Number(b)];
+  }
+
   private renderAssets() {
     this.contexts.forEach(({ ctx, scale }) => {
       this.assets.forEach((asset) => {
@@ -108,7 +142,25 @@ export class Editor {
         const height = Math.round((width * imageHeight) / imageWidth);
         const left = x * scale;
         const top = ctx.canvas.height - height - bottom * scale;
-        ctx.drawImage(asset.image, left, top, width, height);
+
+        this.logoCtx.clearRect(0, 0, this.logoCanvas.width, this.logoCanvas.height);
+        this.logoCtx.drawImage(asset.image, 0, 0, width, height);
+        const imageData = this.logoCtx.getImageData(
+          0,
+          0,
+          this.logoCanvas.width,
+          this.logoCanvas.height
+        );
+        const data = imageData.data;
+        const [r, g, b] = Editor.hexToRGB(this.logoColorCode);
+        for (let i = 0; i < data.length; i += 4) {
+          data[i] = r;
+          data[i + 1] = g;
+          data[i + 2] = b;
+        }
+        this.logoCtx.putImageData(imageData, 0, 0);
+
+        ctx.drawImage(this.logoCanvas, left, top, this.logoCanvas.width, this.logoCanvas.height);
       });
     });
   }
