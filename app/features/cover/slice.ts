@@ -10,7 +10,8 @@ export const initialContentState: ContentState = {
   fontFamily: '',
   artist: '',
   program: '',
-  image: ''
+  image: '',
+  fileName: 'cover'
 };
 
 const slice = createSlice({
@@ -34,12 +35,23 @@ const slice = createSlice({
     },
     setImage: (state, { payload }: PayloadAction<string>) => {
       state.image = payload;
+    },
+    setFileName: (state, { payload }: PayloadAction<string>) => {
+      state.fileName = payload;
     }
   }
 });
 
 export const contentActions = slice.actions;
-export const { setDate, setTime, setFontFamily, setArtist, setProgram, setImage } = slice.actions;
+export const {
+  setDate,
+  setTime,
+  setFontFamily,
+  setArtist,
+  setProgram,
+  setImage,
+  setFileName
+} = slice.actions;
 
 //export const incrementIfOdd = (): AppThunk => {
 //  return (dispatch, getState) => {

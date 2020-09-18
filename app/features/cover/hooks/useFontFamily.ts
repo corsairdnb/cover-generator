@@ -3,14 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'throttle-debounce';
 import { debounceTime } from '../constants';
 import { setFontFamily } from '../slice';
-import { CoverEditorHook } from '../types';
 import { fontFamilySelector } from '../selectors';
 import { Editor } from '../../../editor/Editor';
 
-export const useFontFamily = (
-  editorRef: RefObject<Editor>,
-  onFieldChange: () => void
-): CoverEditorHook => {
+export const useFontFamily = (editorRef: RefObject<Editor>, onFieldChange: () => void) => {
   const dispatch = useDispatch();
   const value = useSelector(fontFamilySelector);
 
@@ -29,10 +25,10 @@ export const useFontFamily = (
     update(value);
   }, [editorRef.current]);
 
-  const onInput = debounce(debounceTime, (fontFamily: string) => {
+  const onFontFamilyInput = debounce(debounceTime, (fontFamily: string) => {
     dispatch(setFontFamily(fontFamily));
     update(fontFamily);
   });
 
-  return { value, onInput };
+  return { onFontFamilyInput };
 };

@@ -4,8 +4,7 @@ import { debounce } from 'throttle-debounce';
 import { debounceTime } from '../constants';
 import { setArtist } from '../slice';
 import { Label, LabelProps } from '../../../editor/Label';
-import { CoverEditorHook } from '../types';
-import { artistSelector } from '../selectors';
+import { artistSelector, colorSelector } from '../selectors';
 import { Editor } from '../../../editor/Editor';
 
 const labelProps: LabelProps = {
@@ -18,32 +17,33 @@ const labelProps: LabelProps = {
   right: 0,
   fontSize: 80,
   maxWidth: 0,
-  color: '#ff0000'
+  color: '#fff'
 };
 
-export const useArtist = (
-  editorRef: RefObject<Editor>,
-  onFieldChange: () => void
-): CoverEditorHook => {
+export const useArtist = (editorRef: RefObject<Editor>, onFieldChange: () => void) => {
   const dispatch = useDispatch();
   const value = useSelector(artistSelector);
+  const color = useSelector(colorSelector);
 
-  const update = useCallback((props) => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    editor.setLabels([new Label(props, labelProps.id)]);
-  }, []);
+  const update = useCallback(
+    (props) => {
+      const editor = editorRef.current;
+      if (!editor) return;
+      editor.setLabels([new Label({ ...props, color }, labelProps.id)]);
+    },
+    [editorRef.current, color]
+  );
 
   useEffect(() => {
     if (!editorRef.current) return;
     update({ ...labelProps, text: value });
-  }, [editorRef.current]);
+  }, [editorRef.current, color]);
 
-  const onInput = debounce(debounceTime, (text: string) => {
+  const onArtistInput = debounce(debounceTime, (text: string) => {
     dispatch(setArtist(text));
     update({ ...labelProps, text });
     onFieldChange();
   });
 
-  return { value, onInput };
+  return { onArtistInput };
 };

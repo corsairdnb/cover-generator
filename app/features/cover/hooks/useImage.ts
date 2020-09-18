@@ -1,26 +1,30 @@
 import { ChangeEvent, RefObject, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setImage } from '../slice';
+import { setImage, setFileName } from '../slice';
 import { CoverEditorImageHook } from '../types';
 import { imageSelector } from '../selectors';
 import { Editor } from '../../../editor/Editor';
 
 export const useImage = (
   editorRef: RefObject<Editor>,
-  onFieldChange: () => void,
   onDataUrlChange: (value: string) => void,
-  onFileChange: (file: File) => void,
   onImageChange: (img: HTMLImageElement) => void
 ): CoverEditorImageHook => {
   const dispatch = useDispatch();
   const value = useSelector(imageSelector);
 
-  const update = useCallback(() => {
+  const update = useCallback((dataUrl?: string, image?: HTMLImageElement) => {
     if (!editorRef.current) return;
-    onDataUrlChange(editorRef.current.getDataUrl() || '');
-    const img = new Image();
-    img.src = value;
-    editorRef.current.image = img;
+    onDataUrlChange(dataUrl || editorRef.current.getDataUrl() || '');
+    if (!image) {
+      const cachedImage = new Image();
+      cachedImage.src = value;
+      editorRef.current.image = cachedImage;
+      onImageChange(cachedImage);
+    } else {
+      editorRef.current.image = image;
+      onImageChange(image);
+    }
   }, []);
 
   useEffect(() => {
@@ -52,15 +56,9 @@ export const useImage = (
         currentImage.src = src;
         currentImage.onload = () => {
           const dataUrl = src;
-          if (editorRef.current) {
-            editorRef.current.image = currentImage;
-          }
-          onDataUrlChange(dataUrl);
           dispatch(setImage(dataUrl));
-          update();
-          onFileChange(file);
-          onFieldChange();
-          onImageChange(currentImage);
+          dispatch(setFileName(file.name));
+          update(dataUrl, currentImage);
         };
       }
     };

@@ -25,11 +25,12 @@ export type ContentState = {
   program: string;
   artist: string;
   image: string;
+  fileName: string;
 };
 
-export type CoverEditorHook = {
-  value: string;
-  onInput: (text: string) => void;
+export type Program = {
+  name: string;
+  color: string;
 };
 
 export type CoverEditorImageHook = {

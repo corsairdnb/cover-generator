@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useCoverEditor } from './useCoverEditor';
 import { usePreset } from './usePreset';
 import { useDate } from './hooks/useDate';
@@ -10,33 +9,24 @@ import { useArtist } from './hooks/useArtist';
 import { useImage } from './hooks/useImage';
 import { Label, LabelProps } from '../../editor/Label';
 import styles from './Cover.module.scss';
-import { dateSelector, programSelector, timeSelector } from './selectors';
+import { useContent } from './hooks/useContent';
+import { programs } from './preset';
 
-// eslint-disable-next-line max-statements
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
   const [image, setImage] = useState<HTMLImageElement | undefined>();
-  const [file, setFile] = useState<File | undefined>();
   const coverContainerRef = useRef<HTMLDivElement | null>(null);
   const { canvasRef, fileInputRef, editorRef } = useCoverEditor({ coverContainerRef });
   const preset = usePreset(editorRef, canvasRef);
-
-  const onFieldChange = () => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    setImageDataUrl(editor.getDataUrl());
-  };
-
-  const stateDate = useSelector(dateSelector);
-  const stateTime = useSelector(timeSelector);
-  const stateProgram = useSelector(programSelector);
+  const content = useContent();
+  const { firstLine, fileName, date, time, program, artist, fontFamily } = content;
 
   const onUpdate = useCallback(() => {
     const editor = editorRef.current;
     if (!editor) return;
     const labelProps: LabelProps = {
       id: 'firstLine',
-      text: `${stateDate}, ${stateTime}, ${stateProgram}`,
+      text: firstLine,
       textAfter: '',
       left: 100,
       top: 100,
@@ -47,28 +37,29 @@ export const Cover: FC = () => {
       color: '#fff'
     };
     editor.setLabels([new Label(labelProps, labelProps.id)]);
-  }, [stateDate, stateTime, stateProgram]);
+    setImageDataUrl(editor.getDataUrl());
+  }, [editorRef.current, { ...content }]);
+
+  const onFieldChange = useCallback(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    onUpdate();
+  }, [editorRef.current, onUpdate]);
+
+  useEffect(() => {
+    if (!editorRef.current) return;
+    onUpdate();
+  }, [editorRef.current, onUpdate, { ...content }]);
 
   const onDataUrlChange = (value: string) => setImageDataUrl(value);
-  const onFileChange = (f: File) => setFile(f);
   const onImageChange = (img: HTMLImageElement) => setImage(img);
 
-  const { onInput: onDateInput, value: date } = useDate(editorRef, onFieldChange, onUpdate);
-  const { onInput: onFontFamilyInput, value: fontFamily } = useFontFamily(editorRef, onFieldChange);
-  const { onInput: onTimeInput, value: time } = useTime(editorRef, onFieldChange, onUpdate);
-  const { onInput: onProgramInput, value: program } = useProgram(
-    editorRef,
-    onFieldChange,
-    onUpdate
-  );
-  const { onInput: onArtistInput, value: artist } = useArtist(editorRef, onFieldChange);
-  const { onImageInput } = useImage(
-    editorRef,
-    onFieldChange,
-    onDataUrlChange,
-    onFileChange,
-    onImageChange
-  );
+  const { onDateInput } = useDate();
+  const { onTimeInput } = useTime();
+  const { onProgramInput } = useProgram();
+  const { onFontFamilyInput } = useFontFamily(editorRef, onFieldChange);
+  const { onArtistInput } = useArtist(editorRef, onFieldChange);
+  const { onImageInput } = useImage(editorRef, onDataUrlChange, onImageChange);
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -108,12 +99,16 @@ export const Cover: FC = () => {
           </p>
           <p>
             Program:{' '}
-            <input
-              type="text"
-              placeholder="Xtra"
+            <select
               defaultValue={program}
               onInput={({ currentTarget: { value } }) => onProgramInput(value)}
-            />
+            >
+              {Object.entries(programs).map(([key, value]) => (
+                <option value={key} key={key}>
+                  {value.name}
+                </option>
+              ))}
+            </select>
           </p>
           <p>
             Artists:{' '}
@@ -134,7 +129,7 @@ export const Cover: FC = () => {
           {/*  </select>*/}
           {/*</p>*/}
           <p>
-            Choose Image: <input type="file" id="file" ref={fileInputRef} onChange={onImageInput} />
+            Choose Image: <input type="file" ref={fileInputRef} onChange={onImageInput} />
           </p>
 
           {image && (
@@ -152,15 +147,13 @@ export const Cover: FC = () => {
             />
           </p>
         </div>
-        {file && (
+        {image && (
           <div className={styles.output}>
-            {file && (
-              <p>
-                <a href={imageDataUrl} download={file.name}>
-                  Download image
-                </a>
-              </p>
-            )}
+            <p>
+              <a href={imageDataUrl} download={fileName}>
+                Download image
+              </a>
+            </p>
           </div>
         )}
       </div>
