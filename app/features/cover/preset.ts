@@ -1,6 +1,7 @@
 // TODO: this props should be provided at application start as json file
 
 import { InitialPreset, Program } from './types';
+import { VerticalAlignment } from '../../editor/Asset';
 
 export const initialPreset: InitialPreset = {
   assets: [
@@ -11,7 +12,8 @@ export const initialPreset: InitialPreset = {
       bottom: 105,
       maxWidth: 200,
       width: 0,
-      maxHeight: 200
+      maxHeight: 200,
+      verticalAlignment: VerticalAlignment.BOTTOM
     }
   ],
   labels: [

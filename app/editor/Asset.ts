@@ -3,6 +3,12 @@ export enum AssetOrientation {
   VERTICAL = 'vertical'
 }
 
+export enum VerticalAlignment {
+  CENTER = 'center',
+  TOP = 'top',
+  BOTTOM = 'bottom'
+}
+
 export type AssetProps = {
   left: number;
   right: number;
@@ -11,6 +17,7 @@ export type AssetProps = {
   maxWidth: number;
   width: number;
   maxHeight: number;
+  verticalAlignment: VerticalAlignment;
 };
 
 export class Asset {

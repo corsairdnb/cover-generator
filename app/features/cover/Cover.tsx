@@ -11,7 +11,7 @@ import { Label, LabelProps } from '../../editor/Label';
 import styles from './Cover.module.scss';
 import { useContent } from './hooks/useContent';
 import { programs } from './preset';
-import { Asset, AssetProps } from '../../editor/Asset';
+import { Asset, AssetProps, VerticalAlignment } from '../../editor/Asset';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -40,11 +40,12 @@ export const Cover: FC = () => {
     const logoProps: AssetProps = {
       left: 100,
       top: 0,
-      bottom: 80,
+      bottom: 105,
       right: 0,
       maxWidth: 0,
       width: 200,
-      maxHeight: 100
+      maxHeight: 0,
+      verticalAlignment: VerticalAlignment.CENTER
     };
     const logoImage = new Image();
     const programLogo = require(`../../assets/programs/${program}.png`) as { default: string };

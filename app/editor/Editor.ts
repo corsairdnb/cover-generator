@@ -5,7 +5,7 @@ import {
   exportWidth,
   initialFontFamily
 } from './constants';
-import { Asset } from './Asset';
+import { Asset, VerticalAlignment } from './Asset';
 import { Label } from './Label';
 import { ContextConfig, EditorAssets, EditorLabels } from './types';
 
@@ -13,16 +13,10 @@ export class Editor {
   private assets: EditorAssets = {};
   private labels: EditorLabels = {};
   private imageElement: HTMLImageElement | undefined;
-  private logoImage: HTMLImageElement | undefined;
   private logoColorCode = '#fff';
 
   set logoColor(value: string) {
     this.logoColorCode = value;
-    this.render();
-  }
-
-  set logo(value: HTMLImageElement) {
-    this.logoImage = value;
     this.render();
   }
 
@@ -132,19 +126,38 @@ export class Editor {
     return [Number(r), Number(g), Number(b)];
   }
 
+  private static computeVerticalOffset(height: number, alignment: VerticalAlignment) {
+    switch (alignment) {
+      case VerticalAlignment.TOP:
+      case VerticalAlignment.BOTTOM:
+        return 0;
+      case VerticalAlignment.CENTER:
+        return height / 5;
+    }
+  }
+
   private renderAssets() {
     this.contexts.forEach(({ ctx, scale }) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(this.assets).forEach(([_id, asset]) => {
-        const { maxWidth, bottom, left: x, width: targetWidth, maxHeight } = asset.props;
+        const {
+          maxWidth,
+          bottom,
+          left: x,
+          width: targetWidth,
+          maxHeight,
+          verticalAlignment
+        } = asset.props;
         const imageWidth = asset.image.width;
         const imageHeight = asset.image.height;
         const width = maxWidth
           ? Math.min(imageWidth * scale, maxWidth) * scale
           : targetWidth * scale;
-        const height = Math.min(Math.round((width * imageHeight) / imageWidth), maxHeight);
+        const fn = maxWidth ? Math.min : Math.max;
+        const height = fn(Math.round((width * imageHeight) / imageWidth), maxHeight);
         const left = x * scale;
-        const top = ctx.canvas.height - height - bottom * scale;
+        const verticalOffset = Editor.computeVerticalOffset(height, verticalAlignment);
+        const top = ctx.canvas.height - height - bottom * scale + verticalOffset;
 
         this.logoCtx.clearRect(0, 0, this.logoCanvas.width, this.logoCanvas.height);
         this.logoCtx.drawImage(asset.image, 0, 0, width, height);
