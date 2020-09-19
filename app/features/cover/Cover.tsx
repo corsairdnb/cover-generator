@@ -11,6 +11,7 @@ import { Label, LabelProps } from '../../editor/Label';
 import styles from './Cover.module.scss';
 import { useContent } from './hooks/useContent';
 import { programs } from './preset';
+import { Asset, AssetProps } from '../../editor/Asset';
 
 export const Cover: FC = () => {
   const [imageDataUrl, setImageDataUrl] = useState('');
@@ -36,10 +37,25 @@ export const Cover: FC = () => {
       maxWidth: 0,
       color: '#fff'
     };
+    const logoProps: AssetProps = {
+      left: 100,
+      top: 0,
+      bottom: 80,
+      right: 0,
+      maxWidth: 0,
+      width: 200,
+      maxHeight: 100
+    };
+    const logoImage = new Image();
+    const programLogo = require(`../../assets/programs/${program}.png`) as { default: string };
+    logoImage.src = programLogo.default;
+    logoImage.onload = () => {
+      editor.addAssets([new Asset(logoProps, logoImage, 'program')]);
+    };
     editor.setLabels([new Label(labelProps, labelProps.id)]);
     editor.logoColor = color;
     setImageDataUrl(editor.getDataUrl());
-  }, [editorRef.current, firstLine, artist, fontFamily, color]);
+  }, [editorRef.current, firstLine, artist, fontFamily, color, program]);
 
   const onFieldChange = useCallback(() => {
     const editor = editorRef.current;
@@ -117,18 +133,11 @@ export const Cover: FC = () => {
               placeholder="Name..."
               defaultValue={artist}
               onInput={({ currentTarget: { value } }) => onArtistInput(value)}
+              rows={3}
             />
           </p>
         </div>
         <div className={styles.design}>
-          {/*<p>*/}
-          {/*  Logo:{' '}*/}
-          {/*  <select>*/}
-          {/*    <option>Logo 1</option>*/}
-          {/*    <option>Logo 2</option>*/}
-          {/*    <option>Logo 3</option>*/}
-          {/*  </select>*/}
-          {/*</p>*/}
           <p>
             Choose Image: <input type="file" ref={fileInputRef} onChange={onImageInput} />
           </p>

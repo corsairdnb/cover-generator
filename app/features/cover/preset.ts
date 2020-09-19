@@ -5,12 +5,13 @@ import { InitialPreset, Program } from './types';
 export const initialPreset: InitialPreset = {
   assets: [
     {
-      id: '11thradio',
-      left: 100,
+      left: 350,
       right: 0,
       top: 0,
-      bottom: 50,
-      maxWidth: 200
+      bottom: 105,
+      maxWidth: 200,
+      width: 0,
+      maxHeight: 200
     }
   ],
   labels: [

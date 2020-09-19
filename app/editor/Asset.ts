@@ -9,14 +9,15 @@ export type AssetProps = {
   top: number;
   bottom: number;
   maxWidth: number;
-  id: string;
+  width: number;
+  maxHeight: number;
 };
 
 export class Asset {
   public assetOrientation: AssetOrientation = AssetOrientation.HORIZONTAL;
   public aspectRatio: number;
 
-  constructor(readonly props: AssetProps, readonly image: HTMLImageElement) {
+  constructor(readonly props: AssetProps, readonly image: HTMLImageElement, readonly id: string) {
     this.image = image;
     this.aspectRatio = Number((image.width / image.height).toFixed(2));
     this.assetOrientation =

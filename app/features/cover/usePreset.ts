@@ -33,7 +33,7 @@ export const usePreset = async (
     const logoImage = new Image();
     logoImage.src = logoRef.current;
     logoImage.onload = () => {
-      const logoAsset = new Asset(initialPreset.assets[0], logoImage);
+      const logoAsset = new Asset(initialPreset.assets[0], logoImage, 'logo');
       assets.push(logoAsset);
       resolvePreset({ assets, labels });
     };

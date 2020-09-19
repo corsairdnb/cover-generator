@@ -7,10 +7,10 @@ import {
 } from './constants';
 import { Asset } from './Asset';
 import { Label } from './Label';
-import { ContextConfig, EditorLabels } from './types';
+import { ContextConfig, EditorAssets, EditorLabels } from './types';
 
 export class Editor {
-  private assets: Asset[] = [];
+  private assets: EditorAssets = {};
   private labels: EditorLabels = {};
   private imageElement: HTMLImageElement | undefined;
   private logoImage: HTMLImageElement | undefined;
@@ -134,12 +134,15 @@ export class Editor {
 
   private renderAssets() {
     this.contexts.forEach(({ ctx, scale }) => {
-      this.assets.forEach((asset) => {
-        const { maxWidth, bottom, left: x } = asset.props;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(this.assets).forEach(([_id, asset]) => {
+        const { maxWidth, bottom, left: x, width: targetWidth, maxHeight } = asset.props;
         const imageWidth = asset.image.width;
         const imageHeight = asset.image.height;
-        const width = Math.min(imageWidth * scale, maxWidth) * scale;
-        const height = Math.round((width * imageHeight) / imageWidth);
+        const width = maxWidth
+          ? Math.min(imageWidth * scale, maxWidth) * scale
+          : targetWidth * scale;
+        const height = Math.min(Math.round((width * imageHeight) / imageWidth), maxHeight);
         const left = x * scale;
         const top = ctx.canvas.height - height - bottom * scale;
 
@@ -188,7 +191,14 @@ export class Editor {
   }
 
   public addAssets(assets: Asset[]) {
-    this.assets = [...this.assets, ...assets];
+    assets.forEach((asset) => {
+      if (!this.assets[asset.id]) {
+        this.assets[asset.id] = asset;
+      } else {
+        const oldAsset = this.assets[asset.id];
+        this.assets[asset.id] = { ...oldAsset, ...asset };
+      }
+    });
     this.render();
   }
 
