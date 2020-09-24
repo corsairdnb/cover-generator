@@ -6,13 +6,13 @@ import { VerticalAlignment } from '../../editor/Asset';
 export const initialPreset: InitialPreset = {
   assets: [
     {
-      left: 350,
+      left: 360,
       right: 0,
       top: 0,
       bottom: 105,
-      maxWidth: 200,
+      maxWidth: 190,
       width: 0,
-      maxHeight: 200,
+      maxHeight: 190,
       verticalAlignment: VerticalAlignment.BOTTOM
     }
   ],
@@ -34,7 +34,7 @@ export const initialPreset: InitialPreset = {
 
 export const programs: { [key: string]: Program } = {
   '2deep': {
-    name: '2deep',
+    name: '2deepdnb',
     color: '#3671ff'
   },
   'audio': {

@@ -38,7 +38,9 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
+if (isDebug) {
   require('electron-debug')();
 }
 
@@ -53,13 +55,13 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+  if (isDebug) {
     await installExtensions();
   }
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
+    width: 1280,
     height: 700,
     webPreferences:
       (process.env.NODE_ENV === 'development' || process.env.E2E_BUILD === 'true') &&

@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import classnames from 'classnames';
 import { useCoverEditor } from './useCoverEditor';
 import { usePreset } from './usePreset';
 import { useDate } from './hooks/useDate';
@@ -29,21 +30,21 @@ export const Cover: FC = () => {
       id: 'firstLine',
       text: firstLine,
       textAfter: '',
-      left: 100,
-      top: 100,
+      left: 130,
+      top: 140,
       bottom: 0,
       right: 0,
-      fontSize: 80,
+      fontSize: 76,
       maxWidth: 0,
       color: '#fff'
     };
     const logoProps: AssetProps = {
-      left: 100,
+      left: 110,
       top: 0,
       bottom: 105,
       right: 0,
       maxWidth: 0,
-      width: 200,
+      width: 190,
       maxHeight: 0,
       verticalAlignment: VerticalAlignment.CENTER
     };
@@ -97,29 +98,32 @@ export const Cover: FC = () => {
     <div className={styles.wrapper}>
       <div className={styles.left}>
         <div className={styles.content}>
-          <p>
-            Date:{' '}
+          <div className={styles.line}>
+            <div className={styles.label}>Date:</div>
             <input
               type="text"
               placeholder="31/12"
               defaultValue={date}
               onInput={({ currentTarget: { value } }) => onDateInput(value)}
+              className={styles.input}
             />
-          </p>
-          <p>
-            Time:{' '}
+          </div>
+          <div className={styles.line}>
+            <div className={styles.label}>Time:</div>
             <input
               type="text"
               placeholder="19:00"
               defaultValue={time}
               onInput={({ currentTarget: { value } }) => onTimeInput(value)}
+              className={styles.input}
             />
-          </p>
-          <p>
-            Program:{' '}
+          </div>
+          <div className={styles.line}>
+            <div className={styles.label}>Program:</div>
             <select
               defaultValue={program}
               onInput={({ currentTarget: { value } }) => onProgramInput(value)}
+              className={styles.input}
             >
               {Object.entries(programs).map(([key, value]) => (
                 <option value={key} key={key}>
@@ -127,44 +131,45 @@ export const Cover: FC = () => {
                 </option>
               ))}
             </select>
-          </p>
-          <p>
-            Artists:{' '}
+          </div>
+          <div className={styles.line}>
+            <div className={styles.label}>Artists:</div>
             <textarea
               placeholder="Name..."
               defaultValue={artist}
               onInput={({ currentTarget: { value } }) => onArtistInput(value)}
-              rows={3}
+              rows={5}
+              className={classnames(styles.input, styles.textarea)}
             />
-          </p>
+          </div>
         </div>
         <div className={styles.design}>
-          <p>
-            Choose Image: <input type="file" ref={fileInputRef} onChange={onImageInput} />
-          </p>
+          <div className={styles.line}>
+            <div className={styles.label}>Image:</div>{' '}
+            <input type="file" ref={fileInputRef} onChange={onImageInput} />
+          </div>
 
           {image && (
-            <p>
-              Image dimensions: {image.width}x{image.height}
-            </p>
+            <div className={styles.line}>
+              <div className={styles.label}>Image size:</div> {image.width}x{image.height}
+            </div>
           )}
-          <p>
-            Font family:{' '}
+          <div className={styles.line}>
+            <div className={styles.label}>Font family:</div>
             <input
               type="text"
               placeholder="Arial"
               defaultValue={fontFamily}
               onInput={({ currentTarget: { value } }) => onFontFamilyInput(value)}
+              className={styles.input}
             />
-          </p>
+          </div>
         </div>
         {image && (
           <div className={styles.output}>
-            <p>
-              <a href={imageDataUrl} download={fileName}>
-                Download image
-              </a>
-            </p>
+            <a href={imageDataUrl} download={fileName} className={styles.download}>
+              Download image
+            </a>
           </div>
         )}
       </div>

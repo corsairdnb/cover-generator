@@ -14,7 +14,7 @@ module.exports = {
 
     // Order
     'order/order': ['declarations', 'custom-properties', 'at-rules', 'rules'],
-    'order/properties-alphabetical-order': true,
+    // 'order/properties-alphabetical-order': true,
 
     // General / Sheet
     'no-duplicate-at-import-rules': true,

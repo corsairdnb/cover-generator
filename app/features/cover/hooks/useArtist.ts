@@ -11,11 +11,11 @@ const labelProps: LabelProps = {
   id: 'artist',
   text: '',
   textAfter: ', ',
-  left: 100,
-  top: 200,
+  left: 130,
+  top: 250,
   bottom: 0,
   right: 0,
-  fontSize: 80,
+  fontSize: 101,
   maxWidth: 0,
   color: '#fff'
 };

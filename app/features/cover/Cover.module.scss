@@ -32,13 +32,48 @@
 }
 
 .content {
-  border-bottom: 1px solid #fff;
+  margin: 30px 0 15px;
 }
 
 .design {
-  border-bottom: 1px solid #fff;
+  margin: 15px 0;
 }
 
 .output {
-  border: 1px solid #f00;
+  margin: 40px 0 0;
+  text-align: center;
+}
+
+.line {
+  margin: 0 0 20px;
+}
+
+.label {
+  display: inline-block;
+  font-size: 22px;
+  text-align: right;
+  vertical-align: top;
+  padding: 0 10px 0 0;
+  min-width: 180px;
+}
+
+.download {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 30px;
+  border: 2px solid currentColor;
+  border-radius: 5px;
+}
+
+.input {
+  font-size: 18px;
+  padding: 5px 10px;
+}
+
+.textarea {
+  min-width: 300px;
+}
+
+:focus {
+  outline: 2px solid #f00;
 }
